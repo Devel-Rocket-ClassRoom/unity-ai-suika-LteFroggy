@@ -1,5 +1,6 @@
 using Suika.Board;
 using Suika.Fruits;
+using Suika.Merge;
 using UnityEngine;
 
 namespace Suika.Drop
@@ -9,6 +10,9 @@ namespace Suika.Drop
         [Header("References")]
         [SerializeField]
         BoardController board;
+
+        [SerializeField]
+        MergeResolver mergeResolver;
 
         [SerializeField]
         FruitTable fruitTable;
@@ -63,7 +67,7 @@ namespace Suika.Drop
             var spawnPos = new Vector3(clampedX, board.DropSpawnY, 0f);
 
             var fruit = Instantiate(fruitPrefab, spawnPos, Quaternion.identity);
-            fruit.Initialize(_currentDef);
+            fruit.Initialize(_currentDef, mergeResolver);
 
             _cooldownRemaining = dropCooldown;
             PrepareNextFruit();

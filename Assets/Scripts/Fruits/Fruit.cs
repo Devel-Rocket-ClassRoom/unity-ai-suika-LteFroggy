@@ -1,4 +1,5 @@
 using UnityEngine;
+using Suika.Merge;
 
 namespace Suika.Fruits
 {
@@ -28,6 +29,8 @@ namespace Suika.Fruits
         public int Level => definition != null ? definition.Level : 0;
         public float Radius => definition != null ? definition.Radius : 0f;
 
+        MergeResolver _mergeResolver;
+
         // MergeResolver(#4)에서 중복 머지 방지에 사용
         public bool HasMerged { get; private set; }
 
@@ -37,9 +40,10 @@ namespace Suika.Fruits
         /// FruitSpawner에서 Instantiate 직후 호출한다.
         /// Collider 반지름, Rigidbody 질량, 스프라이트/색상을 한 번에 적용한다.
         /// </summary>
-        public void Initialize(FruitDefinition def)
+        public void Initialize(FruitDefinition def, MergeResolver resolver)
         {
             definition = def;
+            _mergeResolver = resolver;
             spriteRenderer.sprite = def.Sprite;
             // 임시 원형 Sprite를 붙였으므로, sprite != null이라도 색상 적용
             spriteRenderer.color = def.TintWhenSpriteMissing;
@@ -57,6 +61,17 @@ namespace Suika.Fruits
 
         /// <summary>MergeResolver(#4)가 호출. 이후 이 과일은 머지 대상에서 제외된다.</summary>
         public void MarkMerged() => HasMerged = true;
+
+        // ── 충돌 감지 ──────────────────────────────────────────────────────────
+
+        void OnCollisionEnter2D(Collision2D col)
+        {
+            if (HasMerged) return;
+            var other = col.gameObject.GetComponent<Fruit>();
+            if (other == null || other.HasMerged) return;
+            if (Level != other.Level) return;
+            _mergeResolver?.RequestMerge(this, other);
+        }
 
         // ── 에디터 미리보기 ───────────────────────────────────────────────────
 #if UNITY_EDITOR
