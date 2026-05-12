@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ea783214dc754d4e9132f66c8c5cb0e, type: 3}
+  m_Name: Fruit_03_Grape
+  m_EditorClassIdentifier: Assembly-CSharp::Suika.Fruits.FruitDefinition
+  level: 3
+  displayName: "\uD3EC\uB3C4"
+  radius: 0.31
+  mass: 0.35
+  score: 3
+  canDropFromQueue: 1
+  sprite: {fileID: 0}
+  tintWhenSpriteMissing: {r: 0.55, g: 0.2, b: 0.75, a: 1}
