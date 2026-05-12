@@ -66,6 +66,13 @@ x86/
 # Local agent worktrees
 .claude/
 
+# Unity AI Toolkit & generated assets
+[Aa]ssets/AI Toolkit/
+[Aa]ssets/AI Toolkit.meta
+[Aa]ssets/Plans/
+[Aa]ssets/Plans.meta
+GeneratedAssets/
+
 # OS generated files
 .DS_Store
 .AppleDouble
