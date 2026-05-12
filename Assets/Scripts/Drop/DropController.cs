@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 using Suika.Board;
 using Suika.Fruits;
 
@@ -24,7 +23,7 @@ namespace Suika.Drop
         FruitDefinition _currentDef;
         float _cooldownRemaining;
         bool _canDrop;
-        Vector2 _mouseScreenPos;
+        Vector3 _mouseScreenPos;
 
         void Start()
         {
@@ -34,15 +33,12 @@ namespace Suika.Drop
 
         void Update()
         {
-            if (Mouse.current != null)
-                _mouseScreenPos = Mouse.current.position.ReadValue();
+            _mouseScreenPos = Input.mousePosition;
 
             UpdateCooldown(Time.deltaTime);
             UpdatePreviewPosition();
 
-            bool dropPressed = (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
-                             || (Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame);
-            if (_canDrop && dropPressed)
+            if (_canDrop && (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space)))
                 ExecuteDrop();
         }
 
@@ -112,10 +108,11 @@ namespace Suika.Drop
             return pool[count - 1];
         }
 
-        Vector3 ScreenToWorld(Vector2 screenPos)
+        Vector3 ScreenToWorld(Vector3 screenPos)
         {
             var cam = mainCamera != null ? mainCamera : Camera.main;
-            var pos = cam.ScreenToWorldPoint(new Vector3(screenPos.x, screenPos.y, 0f));
+            screenPos.z = 0f;
+            var pos = cam.ScreenToWorldPoint(screenPos);
             return new Vector3(pos.x, pos.y, 0f);
         }
 
