@@ -42,12 +42,27 @@ namespace Suika.Drop
         FruitDefinition _nextDef;
         float _cooldownRemaining;
         bool _canDrop;
+        bool _inputEnabled = true;
         Vector3 _mouseScreenPos;
 
         public FruitDefinition CurrentFruit => _currentDef;
         public FruitDefinition NextFruit => _nextDef;
 
         public event Action<FruitDefinition, FruitDefinition> FruitQueueChanged;
+
+        // ── 공개 API (GameManager #6) ─────────────────────────────────────────
+
+        /// <summary>게임오버 시 드롭 입력을 차단, 재시작 시 다시 활성화한다.</summary>
+        public void SetInputEnabled(bool enabled) => _inputEnabled = enabled;
+
+        /// <summary>재시작 시 큐와 쿨다운을 초기화한다.</summary>
+        public void ResetForRestart()
+        {
+            _inputEnabled = true;
+            _cooldownRemaining = 0f;
+            _canDrop = true;
+            InitializeQueue();
+        }
 
         void Start()
         {
@@ -62,7 +77,7 @@ namespace Suika.Drop
             UpdateCooldown(Time.deltaTime);
             UpdatePreviewPosition();
 
-            if (_canDrop && (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space)))
+            if (_inputEnabled && _canDrop && (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space)))
                 ExecuteDrop();
         }
 

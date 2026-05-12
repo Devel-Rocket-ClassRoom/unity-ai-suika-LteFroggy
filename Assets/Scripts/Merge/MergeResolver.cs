@@ -17,11 +17,19 @@ namespace Suika.Merge
         readonly List<(Fruit a, Fruit b)> _pendingMerges = new();
         readonly HashSet<int> _pendingIds = new();
 
+        bool _mergeEnabled = true;
+
         // ScoreManager(#5)에서 구독
         public static event Action<int> MergeScored;
 
+        /// <summary>게임오버 시 머지 처리를 차단, 재시작 시 다시 활성화한다.</summary>
+        public void SetMergeEnabled(bool enabled) => _mergeEnabled = enabled;
+
         public void RequestMerge(Fruit a, Fruit b)
         {
+            if (!_mergeEnabled)
+                return;
+
             int idA = a.GetInstanceID();
             int idB = b.GetInstanceID();
             if (_pendingIds.Contains(idA) || _pendingIds.Contains(idB))
