@@ -1,3 +1,4 @@
+using System;
 using Suika.Board;
 using Suika.Fruits;
 using Suika.Merge;
@@ -33,18 +34,24 @@ namespace Suika.Drop
         [SerializeField]
         float previewAlpha = 0.5f;
 
-        [Header("Drop Weights — FruitSpawner(#5) 전 임시")]
+        [Header("Drop Weights")]
         [SerializeField]
         float[] dropWeights = { 60f, 25f, 8f, 5f, 2f };
 
         FruitDefinition _currentDef;
+        FruitDefinition _nextDef;
         float _cooldownRemaining;
         bool _canDrop;
         Vector3 _mouseScreenPos;
 
+        public FruitDefinition CurrentFruit => _currentDef;
+        public FruitDefinition NextFruit => _nextDef;
+
+        public event Action<FruitDefinition, FruitDefinition> FruitQueueChanged;
+
         void Start()
         {
-            PrepareNextFruit();
+            InitializeQueue();
             _canDrop = true;
         }
 
@@ -61,6 +68,9 @@ namespace Suika.Drop
 
         void ExecuteDrop()
         {
+            if (_currentDef == null)
+                return;
+
             _canDrop = false;
 
             float clampedX = board.ClampDropX(ScreenToWorld(_mouseScreenPos).x, _currentDef.Radius);
@@ -70,19 +80,32 @@ namespace Suika.Drop
             fruit.Initialize(_currentDef, mergeResolver);
 
             _cooldownRemaining = dropCooldown;
-            PrepareNextFruit();
+            AdvanceQueue();
         }
 
-        void PrepareNextFruit()
+        void InitializeQueue()
         {
             _currentDef = PickWeightedRandom();
-            if (previewRenderer == null)
+            _nextDef = PickWeightedRandom();
+            ApplyPreview();
+            FruitQueueChanged?.Invoke(_currentDef, _nextDef);
+        }
+
+        void AdvanceQueue()
+        {
+            _currentDef = _nextDef;
+            _nextDef = PickWeightedRandom();
+            ApplyPreview();
+            FruitQueueChanged?.Invoke(_currentDef, _nextDef);
+        }
+
+        void ApplyPreview()
+        {
+            if (previewRenderer == null || _currentDef == null)
                 return;
 
             previewRenderer.sprite = _currentDef.Sprite;
-            // 임시 원형 Sprite를 붙였으므로, sprite != null이라도 색상 적용
             var color = _currentDef.TintWhenSpriteMissing;
-            // var color = _currentDef.Sprite != null ? Color.white : _currentDef.TintWhenSpriteMissing;
             color.a = previewAlpha;
             previewRenderer.color = color;
 
@@ -117,19 +140,31 @@ namespace Suika.Drop
         {
             var pool = fruitTable.DroppableDefinitions;
             int count = Mathf.Min(pool.Count, dropWeights.Length);
+            if (count <= 0)
+            {
+                Debug.LogError("[DropController] No droppable fruit definitions are configured.", this);
+                return null;
+            }
 
             float total = 0f;
             for (int i = 0; i < count; i++)
-                total += dropWeights[i];
+                total += Mathf.Max(0f, dropWeights[i]);
 
-            float roll = Random.value * total;
+            if (total <= 0f)
+            {
+                Debug.LogError("[DropController] Drop weights must contain at least one positive value.", this);
+                return pool[0];
+            }
+
+            float roll = UnityEngine.Random.Range(0f, total);
             float cumulative = 0f;
             for (int i = 0; i < count; i++)
             {
-                cumulative += dropWeights[i];
+                cumulative += Mathf.Max(0f, dropWeights[i]);
                 if (roll < cumulative)
                     return pool[i];
             }
+
             return pool[count - 1];
         }
 
@@ -146,6 +181,7 @@ namespace Suika.Drop
         {
             if (board == null)
                 return;
+
             float radius = _currentDef != null ? _currentDef.Radius : 0.18f;
             var (min, max) = board.GetDropXRange(radius);
 
