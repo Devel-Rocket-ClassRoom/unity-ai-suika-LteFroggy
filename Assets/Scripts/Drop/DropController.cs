@@ -25,23 +25,6 @@ namespace Suika.Drop
         float _cooldownRemaining;
         bool _canDrop;
         Vector2 _mouseScreenPos;
-        InputSystem_Actions _actions;
-
-        void OnEnable()
-        {
-            _actions = new InputSystem_Actions();
-            _actions.Player.Enable();
-            _actions.Player.Attack.performed += OnDropPerformed;
-            _actions.Player.Jump.performed += OnDropPerformed;
-        }
-
-        void OnDisable()
-        {
-            _actions.Player.Attack.performed -= OnDropPerformed;
-            _actions.Player.Jump.performed -= OnDropPerformed;
-            _actions.Player.Disable();
-            _actions.Dispose();
-        }
 
         void Start()
         {
@@ -56,12 +39,11 @@ namespace Suika.Drop
 
             UpdateCooldown(Time.deltaTime);
             UpdatePreviewPosition();
-        }
 
-        void OnDropPerformed(InputAction.CallbackContext ctx)
-        {
-            if (!_canDrop) return;
-            ExecuteDrop();
+            bool dropPressed = (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
+                             || (Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame);
+            if (_canDrop && dropPressed)
+                ExecuteDrop();
         }
 
         void ExecuteDrop()
