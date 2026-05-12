@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Suika.Board
@@ -12,9 +13,11 @@ namespace Suika.Board
         [Header("Walls / Floor")]
         [SerializeField]
         Transform leftWall;
+        SpriteRenderer leftWallRenderer;
 
         [SerializeField]
         Transform rightWall;
+        SpriteRenderer rightWallRenderer;
 
         [SerializeField]
         Transform floor;
@@ -27,12 +30,18 @@ namespace Suika.Board
         float dropSpawnY = 4.15f;
 
         // ── 경계 프로퍼티 ─────────────────────────────────────────────────────
-        public float LeftX => leftWall.position.x;
-        public float RightX => rightWall.position.x;
+        public float LeftX => leftWall.GetComponent<SpriteRenderer>().bounds.max.x;
+        public float RightX => rightWall.GetComponent<SpriteRenderer>().bounds.min.x;
         public float FloorY => floor.position.y;
         public float DangerLineY => dangerLineY;
         public float DropSpawnY => dropSpawnY;
         public float InnerWidth => RightX - LeftX;
+
+        private void Awake()
+        {
+            leftWallRenderer = leftWall.GetComponent<SpriteRenderer>();
+            rightWallRenderer = rightWall.GetComponent<SpriteRenderer>();
+        }
 
         // ── 드롭 X 범위 API ───────────────────────────────────────────────────
 

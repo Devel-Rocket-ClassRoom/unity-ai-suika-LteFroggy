@@ -17,21 +17,8 @@ namespace Suika.Merge
         readonly List<(Fruit a, Fruit b)> _pendingMerges = new();
         readonly HashSet<int> _pendingIds = new();
 
-        public static MergeResolver Instance { get; private set; }
-
         // ScoreManager(#5)에서 구독
         public static event Action<int> MergeScored;
-
-        void Awake()
-        {
-            Instance = this;
-        }
-
-        void OnDestroy()
-        {
-            if (Instance == this)
-                Instance = null;
-        }
 
         public void RequestMerge(Fruit a, Fruit b)
         {
@@ -72,7 +59,7 @@ namespace Suika.Merge
             {
                 Vector2 spawnPos = board.ClampMergePosition(mergePos, nextDef.Radius);
                 var spawned = Instantiate(fruitPrefab, spawnPos, Quaternion.identity);
-                spawned.Initialize(nextDef);
+                spawned.Initialize(nextDef, this);
                 MergeScored?.Invoke(nextDef.Score);
             }
             else

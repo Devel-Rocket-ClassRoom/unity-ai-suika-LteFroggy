@@ -29,6 +29,8 @@ namespace Suika.Fruits
         public int Level => definition != null ? definition.Level : 0;
         public float Radius => definition != null ? definition.Radius : 0f;
 
+        MergeResolver _mergeResolver;
+
         // MergeResolver(#4)에서 중복 머지 방지에 사용
         public bool HasMerged { get; private set; }
 
@@ -38,9 +40,10 @@ namespace Suika.Fruits
         /// FruitSpawner에서 Instantiate 직후 호출한다.
         /// Collider 반지름, Rigidbody 질량, 스프라이트/색상을 한 번에 적용한다.
         /// </summary>
-        public void Initialize(FruitDefinition def)
+        public void Initialize(FruitDefinition def, MergeResolver resolver)
         {
             definition = def;
+            _mergeResolver = resolver;
             spriteRenderer.sprite = def.Sprite;
             // 임시 원형 Sprite를 붙였으므로, sprite != null이라도 색상 적용
             spriteRenderer.color = def.TintWhenSpriteMissing;
@@ -67,7 +70,7 @@ namespace Suika.Fruits
             var other = col.gameObject.GetComponent<Fruit>();
             if (other == null || other.HasMerged) return;
             if (Level != other.Level) return;
-            MergeResolver.Instance?.RequestMerge(this, other);
+            _mergeResolver?.RequestMerge(this, other);
         }
 
         // ── 에디터 미리보기 ───────────────────────────────────────────────────
