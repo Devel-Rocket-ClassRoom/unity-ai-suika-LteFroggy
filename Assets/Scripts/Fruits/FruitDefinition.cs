@@ -10,29 +10,41 @@ namespace Suika.Fruits
     public sealed class FruitDefinition : ScriptableObject
     {
         [Header("기본 정보")]
-        [SerializeField] int   level;
-        [SerializeField] string displayName;
+        [SerializeField]
+        int level;
+
+        [SerializeField]
+        string displayName;
 
         [Header("물리")]
-        [SerializeField] float radius;
-        [SerializeField] float mass;
+        [SerializeField]
+        float radius;
+
+        [SerializeField]
+        float mass;
 
         [Header("점수 / 드롭")]
-        [SerializeField] int   score;
-        [SerializeField] bool  canDropFromQueue;
+        [SerializeField]
+        int score;
+
+        [SerializeField]
+        bool canDropFromQueue;
 
         [Header("그래픽")]
-        [SerializeField] Sprite sprite;
-        [SerializeField] Color  tintWhenSpriteMissing = Color.white;
+        [SerializeField]
+        Sprite sprite;
+
+        [SerializeField]
+        Color tintWhenSpriteMissing = Color.white;
 
         // ── 공개 프로퍼티 ─────────────────────────────────────────────────────
-        public int    Level                  => level;
-        public string DisplayName            => displayName;
-        public float  Radius                 => radius;
-        public float  Mass                   => mass;
-        public int    Score                  => score;
-        public bool   CanDropFromQueue       => canDropFromQueue;
-        public Sprite Sprite                 => sprite;
-        public Color  TintWhenSpriteMissing  => tintWhenSpriteMissing;
+        public int Level => level;
+        public string DisplayName => displayName;
+        public float Radius => radius;
+        public float Mass => mass;
+        public int Score => score;
+        public bool CanDropFromQueue => canDropFromQueue;
+        public Sprite Sprite => sprite;
+        public Color TintWhenSpriteMissing => tintWhenSpriteMissing;
     }
 }

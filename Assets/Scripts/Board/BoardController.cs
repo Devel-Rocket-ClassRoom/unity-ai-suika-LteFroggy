@@ -10,21 +10,29 @@ namespace Suika.Board
     public sealed class BoardController : MonoBehaviour
     {
         [Header("Walls / Floor")]
-        [SerializeField] Transform leftWall;
-        [SerializeField] Transform rightWall;
-        [SerializeField] Transform floor;
+        [SerializeField]
+        Transform leftWall;
+
+        [SerializeField]
+        Transform rightWall;
+
+        [SerializeField]
+        Transform floor;
 
         [Header("Lines")]
-        [SerializeField] float dangerLineY = 3.45f;
-        [SerializeField] float dropSpawnY  = 4.15f;
+        [SerializeField]
+        float dangerLineY = 3.45f;
+
+        [SerializeField]
+        float dropSpawnY = 4.15f;
 
         // ── 경계 프로퍼티 ─────────────────────────────────────────────────────
-        public float LeftX       => leftWall.position.x;
-        public float RightX      => rightWall.position.x;
-        public float FloorY      => floor.position.y;
+        public float LeftX => leftWall.position.x;
+        public float RightX => rightWall.position.x;
+        public float FloorY => floor.position.y;
         public float DangerLineY => dangerLineY;
-        public float DropSpawnY  => dropSpawnY;
-        public float InnerWidth  => RightX - LeftX;
+        public float DropSpawnY => dropSpawnY;
+        public float InnerWidth => RightX - LeftX;
 
         // ── 드롭 X 범위 API ───────────────────────────────────────────────────
 
@@ -74,19 +82,22 @@ namespace Suika.Board
             Gizmos.color = Color.white;
             Gizmos.DrawWireCube(
                 new Vector3(0f, (dangerLineY + FloorY) * 0.5f, 0f),
-                new Vector3(InnerWidth, dangerLineY - FloorY, 0f));
+                new Vector3(InnerWidth, dangerLineY - FloorY, 0f)
+            );
 
             // 위험 라인 (빨간색)
             Gizmos.color = Color.red;
             Gizmos.DrawLine(
-                new Vector3(LeftX,  dangerLineY, 0f),
-                new Vector3(RightX, dangerLineY, 0f));
+                new Vector3(LeftX, dangerLineY, 0f),
+                new Vector3(RightX, dangerLineY, 0f)
+            );
 
             // 드롭 스폰 라인 (노란색)
             Gizmos.color = Color.yellow;
             Gizmos.DrawLine(
-                new Vector3(LeftX,  dropSpawnY, 0f),
-                new Vector3(RightX, dropSpawnY, 0f));
+                new Vector3(LeftX, dropSpawnY, 0f),
+                new Vector3(RightX, dropSpawnY, 0f)
+            );
         }
 #endif
     }

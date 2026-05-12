@@ -11,15 +11,22 @@ namespace Suika.Fruits
     [RequireComponent(typeof(SpriteRenderer))]
     public sealed class Fruit : MonoBehaviour
     {
-        [SerializeField] FruitDefinition   definition;
-        [SerializeField] Rigidbody2D       body;
-        [SerializeField] CircleCollider2D  circle;
-        [SerializeField] SpriteRenderer    spriteRenderer;
+        [SerializeField]
+        FruitDefinition definition;
+
+        [SerializeField]
+        Rigidbody2D body;
+
+        [SerializeField]
+        CircleCollider2D circle;
+
+        [SerializeField]
+        SpriteRenderer spriteRenderer;
 
         // ── 공개 프로퍼티 ─────────────────────────────────────────────────────
         public FruitDefinition Definition => definition;
-        public int             Level      => definition != null ? definition.Level  : 0;
-        public float           Radius     => definition != null ? definition.Radius : 0f;
+        public int Level => definition != null ? definition.Level : 0;
+        public float Radius => definition != null ? definition.Radius : 0f;
 
         // MergeResolver(#4)에서 중복 머지 방지에 사용
         public bool HasMerged { get; private set; }
@@ -32,12 +39,12 @@ namespace Suika.Fruits
         /// </summary>
         public void Initialize(FruitDefinition def)
         {
-            definition            = def;
-            circle.radius         = def.Radius;
-            body.mass             = def.Mass;
+            definition = def;
+            circle.radius = def.Radius;
+            body.mass = def.Mass;
             spriteRenderer.sprite = def.Sprite;
-            spriteRenderer.color  = def.Sprite != null ? Color.white : def.TintWhenSpriteMissing;
-            gameObject.name       = $"Fruit_L{def.Level:00}_{def.DisplayName}";
+            spriteRenderer.color = def.Sprite != null ? Color.white : def.TintWhenSpriteMissing;
+            gameObject.name = $"Fruit_L{def.Level:00}_{def.DisplayName}";
         }
 
         /// <summary>MergeResolver(#4)가 호출. 이후 이 과일은 머지 대상에서 제외된다.</summary>
@@ -47,12 +54,15 @@ namespace Suika.Fruits
 #if UNITY_EDITOR
         void OnValidate()
         {
-            if (definition == null) return;
-            if (circle == null) circle = GetComponent<CircleCollider2D>();
-            if (body   == null) body   = GetComponent<Rigidbody2D>();
+            if (definition == null)
+                return;
+            if (circle == null)
+                circle = GetComponent<CircleCollider2D>();
+            if (body == null)
+                body = GetComponent<Rigidbody2D>();
 
             circle.radius = definition.Radius;
-            body.mass     = definition.Mass;
+            body.mass = definition.Mass;
         }
 #endif
     }

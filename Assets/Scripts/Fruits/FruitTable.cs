@@ -12,7 +12,8 @@ namespace Suika.Fruits
     {
         public const int MaxLevel = 11;
 
-        [SerializeField] FruitDefinition[] definitions;
+        [SerializeField]
+        FruitDefinition[] definitions;
 
         List<FruitDefinition> _droppableCache;
 
@@ -22,7 +23,8 @@ namespace Suika.Fruits
         public FruitDefinition GetByLevel(int level)
         {
             foreach (var def in definitions)
-                if (def != null && def.Level == level) return def;
+                if (def != null && def.Level == level)
+                    return def;
             return null;
         }
 
@@ -32,7 +34,8 @@ namespace Suika.Fruits
         /// </summary>
         public FruitDefinition GetNextLevel(FruitDefinition current)
         {
-            if (current == null || current.Level >= MaxLevel) return null;
+            if (current == null || current.Level >= MaxLevel)
+                return null;
             return GetByLevel(current.Level + 1);
         }
 
@@ -44,7 +47,8 @@ namespace Suika.Fruits
         {
             get
             {
-                if (_droppableCache == null) RebuildDropCache();
+                if (_droppableCache == null)
+                    RebuildDropCache();
                 return _droppableCache;
             }
         }
@@ -54,7 +58,8 @@ namespace Suika.Fruits
         void RebuildDropCache()
         {
             _droppableCache = new List<FruitDefinition>();
-            if (definitions == null) return;
+            if (definitions == null)
+                return;
             foreach (var def in definitions)
                 if (def != null && def.CanDropFromQueue)
                     _droppableCache.Add(def);
@@ -63,10 +68,12 @@ namespace Suika.Fruits
         void OnValidate()
         {
             _droppableCache = null; // 인스펙터 변경 시 캐시 무효화
-
 #if UNITY_EDITOR
             if (definitions != null && definitions.Length != MaxLevel)
-                Debug.LogWarning($"[FruitTable] definitions 배열 길이가 {MaxLevel}이어야 합니다. (현재 {definitions.Length})", this);
+                Debug.LogWarning(
+                    $"[FruitTable] definitions 배열 길이가 {MaxLevel}이어야 합니다. (현재 {definitions.Length})",
+                    this
+                );
 #endif
         }
 
