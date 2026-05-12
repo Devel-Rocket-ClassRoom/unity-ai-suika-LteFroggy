@@ -40,10 +40,18 @@ namespace Suika.Fruits
         public void Initialize(FruitDefinition def)
         {
             definition = def;
-            circle.radius = def.Radius;
-            body.mass = def.Mass;
             spriteRenderer.sprite = def.Sprite;
-            spriteRenderer.color = def.Sprite != null ? Color.white : def.TintWhenSpriteMissing;
+            // 임시 원형 Sprite를 붙였으므로, sprite != null이라도 색상 적용
+            spriteRenderer.color = def.TintWhenSpriteMissing;
+            // spriteRenderer.color = def.Sprite != null ? Color.white : def.TintWhenSpriteMissing;
+
+            // 스프라이트 실제 크기 기준으로 scale 계산 → 콜라이더와 렌더링 크기 일치
+            float spriteWorldSize = def.Sprite != null ? def.Sprite.bounds.size.x : 1f;
+            float scale = (def.Radius * 2f) / spriteWorldSize;
+            transform.localScale = new Vector3(scale, scale, 1f);
+            circle.radius = 0.5f;
+
+            body.mass = def.Mass;
             gameObject.name = $"Fruit_L{def.Level:00}_{def.DisplayName}";
         }
 
@@ -61,7 +69,10 @@ namespace Suika.Fruits
             if (body == null)
                 body = GetComponent<Rigidbody2D>();
 
-            circle.radius = definition.Radius;
+            float spriteWorldSize = definition.Sprite != null ? definition.Sprite.bounds.size.x : 1f;
+            float scale = (definition.Radius * 2f) / spriteWorldSize;
+            transform.localScale = new Vector3(scale, scale, 1f);
+            circle.radius = 0.5f;
             body.mass = definition.Mass;
         }
 #endif

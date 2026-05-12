@@ -18,5 +18,5 @@ MonoBehaviour:
   mass: 2.3
   score: 45
   canDropFromQueue: 0
-  sprite: {fileID: 0}
+  sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
   tintWhenSpriteMissing: {r: 0.35, g: 0.8, b: 0.25, a: 1}
