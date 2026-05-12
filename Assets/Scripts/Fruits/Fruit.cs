@@ -1,4 +1,5 @@
 using UnityEngine;
+using Suika.Merge;
 
 namespace Suika.Fruits
 {
@@ -57,6 +58,17 @@ namespace Suika.Fruits
 
         /// <summary>MergeResolver(#4)가 호출. 이후 이 과일은 머지 대상에서 제외된다.</summary>
         public void MarkMerged() => HasMerged = true;
+
+        // ── 충돌 감지 ──────────────────────────────────────────────────────────
+
+        void OnCollisionEnter2D(Collision2D col)
+        {
+            if (HasMerged) return;
+            var other = col.gameObject.GetComponent<Fruit>();
+            if (other == null || other.HasMerged) return;
+            if (Level != other.Level) return;
+            MergeResolver.Instance?.RequestMerge(this, other);
+        }
 
         // ── 에디터 미리보기 ───────────────────────────────────────────────────
 #if UNITY_EDITOR
