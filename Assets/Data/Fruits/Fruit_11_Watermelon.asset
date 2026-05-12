@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ea783214dc754d4e9132f66c8c5cb0e, type: 3}
+  m_Name: Fruit_11_Watermelon
+  m_EditorClassIdentifier: Assembly-CSharp::Suika.Fruits.FruitDefinition
+  level: 11
+  displayName: "\uC218\uBC15"
+  radius: 1.42
+  mass: 3
+  score: 55
+  canDropFromQueue: 0
+  sprite: {fileID: 0}
+  tintWhenSpriteMissing: {r: 0.15, g: 0.65, b: 0.15, a: 1}

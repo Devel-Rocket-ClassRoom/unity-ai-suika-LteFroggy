@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b6ec1c11ac666c49a35f424d9f94a3c, type: 3}
+  m_Name: FruitTable
+  m_EditorClassIdentifier: Assembly-CSharp::Suika.Fruits.FruitTable
+  definitions:
+  - {fileID: 11400000, guid: 7fdafeb0e86b14248a071453c0d8e571, type: 2}
+  - {fileID: 11400000, guid: d75455f2845043a40976ad9ddacfb749, type: 2}
+  - {fileID: 11400000, guid: e5388ab8ab2c001458377979abc09a3d, type: 2}
+  - {fileID: 11400000, guid: c44dfe5a2897f6e4ea67d6a394d31d04, type: 2}
+  - {fileID: 11400000, guid: 01d19c42417e6504eb5e4bcce8451e2d, type: 2}
+  - {fileID: 11400000, guid: f7ef16c35e189914d929af0f1a345aad, type: 2}
+  - {fileID: 11400000, guid: 850002158bb961c4fbea9afda98fdfc9, type: 2}
+  - {fileID: 11400000, guid: 0560fa1aa1abd354d9df508c9237cf58, type: 2}
+  - {fileID: 11400000, guid: b0518ffd02e3ecf449f5ee02e00f5c95, type: 2}
+  - {fileID: 11400000, guid: 353419a46672f15478bac592cf39a182, type: 2}
+  - {fileID: 11400000, guid: 3c529fc7c8b890e4c8c81e1b926c2cc4, type: 2}
