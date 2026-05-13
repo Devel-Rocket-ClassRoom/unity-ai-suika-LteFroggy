@@ -5,22 +5,20 @@ namespace Suika.Board
 {
     /// <summary>
     /// 보드 경계, 위험 라인, 드롭 가능 범위 정보를 다른 시스템에 제공한다.
-    /// 인스펙터에 노출된 Transform/수치를 기준으로 동작하므로
-    /// 씬에서 벽 오브젝트를 이동하면 자동으로 반영된다.
+    /// 물리 Collider2D를 기준으로 경계를 계산하므로
+    /// Visual 자식 오브젝트를 교체해도 충돌 영역이 변하지 않는다.
     /// </summary>
     public sealed class BoardController : MonoBehaviour
     {
-        [Header("Walls / Floor")]
+        [Header("Walls / Floor (Collider2D)")]
         [SerializeField]
-        Transform leftWall;
-        SpriteRenderer leftWallRenderer;
+        Collider2D leftWall;
 
         [SerializeField]
-        Transform rightWall;
-        SpriteRenderer rightWallRenderer;
+        Collider2D rightWall;
 
         [SerializeField]
-        Transform floor;
+        Collider2D floor;
 
         [Header("Lines")]
         [SerializeField]
@@ -30,18 +28,12 @@ namespace Suika.Board
         float dropSpawnY = 4.15f;
 
         // ── 경계 프로퍼티 ─────────────────────────────────────────────────────
-        public float LeftX => leftWall.GetComponent<SpriteRenderer>().bounds.max.x;
-        public float RightX => rightWall.GetComponent<SpriteRenderer>().bounds.min.x;
-        public float FloorY => floor.position.y;
+        public float LeftX => leftWall.bounds.max.x;
+        public float RightX => rightWall.bounds.min.x;
+        public float FloorY => floor.bounds.max.y;
         public float DangerLineY => dangerLineY;
         public float DropSpawnY => dropSpawnY;
         public float InnerWidth => RightX - LeftX;
-
-        private void Awake()
-        {
-            leftWallRenderer = leftWall.GetComponent<SpriteRenderer>();
-            rightWallRenderer = rightWall.GetComponent<SpriteRenderer>();
-        }
 
         // ── 드롭 X 범위 API ───────────────────────────────────────────────────
 
@@ -87,6 +79,9 @@ namespace Suika.Board
 #if UNITY_EDITOR
         void OnDrawGizmos()
         {
+            if (leftWall == null || rightWall == null || floor == null)
+                return;
+
             // 보드 외곽 (흰색)
             Gizmos.color = Color.white;
             Gizmos.DrawWireCube(
