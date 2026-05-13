@@ -29,7 +29,7 @@ namespace Suika.Drop
 
         [Header("Drop Settings")]
         [SerializeField]
-        float dropCooldown = 0.5f;
+        float dropCooldown = 0.1f;
 
         [SerializeField]
         float previewAlpha = 0.5f;
@@ -77,7 +77,11 @@ namespace Suika.Drop
             UpdateCooldown(Time.deltaTime);
             UpdatePreviewPosition();
 
-            if (_inputEnabled && _canDrop && (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space)))
+            if (
+                _inputEnabled
+                && _canDrop
+                && (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space))
+            )
                 ExecuteDrop();
         }
 
@@ -124,7 +128,8 @@ namespace Suika.Drop
             color.a = previewAlpha;
             previewRenderer.color = color;
 
-            float spriteWorldSize = _currentDef.Sprite != null ? _currentDef.Sprite.bounds.size.x : 1f;
+            float spriteWorldSize =
+                _currentDef.Sprite != null ? _currentDef.Sprite.bounds.size.x : 1f;
             float scale = (_currentDef.Radius * 2f) / spriteWorldSize;
             previewRenderer.transform.localScale = new Vector3(scale, scale, 1f);
         }
@@ -157,7 +162,10 @@ namespace Suika.Drop
             int count = Mathf.Min(pool.Count, dropWeights.Length);
             if (count <= 0)
             {
-                Debug.LogError("[DropController] No droppable fruit definitions are configured.", this);
+                Debug.LogError(
+                    "[DropController] No droppable fruit definitions are configured.",
+                    this
+                );
                 return null;
             }
 
@@ -167,7 +175,10 @@ namespace Suika.Drop
 
             if (total <= 0f)
             {
-                Debug.LogError("[DropController] Drop weights must contain at least one positive value.", this);
+                Debug.LogError(
+                    "[DropController] Drop weights must contain at least one positive value.",
+                    this
+                );
                 return pool[0];
             }
 
